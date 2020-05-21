@@ -67,16 +67,17 @@ class GUI:
         
 
     def read_from_serial(self):
-        received = self.Serial.serial_receive_int(1)
-        if received != -1:
-            self.predicted_label_2.configure(text=str(received))
+        infered_class = self.Serial.serial_receive_int()
+        accuracy = self.Serial.serial_receive_float()
+        if infered_class != -1:
+            self.predicted_label_2.configure(text=str(infered_class))
             if self.labels.shape[-1] != 0:
                 self.predicted_label_2.configure(text=self.predicted_label_2.cget("text") + 
-                                            ", " + self.labels[int(received)])
+                                            ", " + self.labels[int(infered_class)])
                 if self.gnd_trh.shape[-1] != 0:
                     self.ground_truth_2.configure(text=str(int(self.gnd_trh[self.i-1])) + ", " 
                         + self.labels[int(self.gnd_trh[self.i-1])])
-                    if int(received) == int(self.gnd_trh[self.i-1]):
+                    if int(infered_class) == int(self.gnd_trh[self.i-1]):
                         self.predicted_label_1.configure(bg='green')
                         self.predicted_label_2.configure(bg='green')
                         self.ground_truth_1.configure(bg='green')
@@ -92,7 +93,9 @@ class GUI:
             self.correct_counter_lbl_display.configure(text=str(self.correct_inference))
             self.correct_percentage_lbl_display.configure(text='{:.2f}'.format(self.correct_inference/self.all_inference*100))
             self.sent_counter_lbl_display.configure(text=int(self.all_inference))
-            #self.accuracy_lbl_display.configure(text=self.
+        
+        if accuracy != -1:
+            self.accuracy_lbl_display.configure(text='{:.2f}'.format(accuracy))
 
         self.window.after(100, self.read_from_serial)
 

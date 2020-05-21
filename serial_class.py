@@ -18,14 +18,14 @@ class Serial:
         data = bytearray(image)
         self.serialPort.write(bytes(data))
 
-    def serial_receive_int(self, byte_to_receive):
+    def serial_receive_int(self):
         if(self.serialPort.in_waiting == 1):
             serialString = self.serialPort.read(1) # read up to byte_to_receive or as much as in buffer
             return int.from_bytes(serialString, "big")
         else:
             return -1 # No data in buffer
 
-    def serial_receive_float(self, byte_to_receive):
+    def serial_receive_float(self):
         if(self.serialPort.in_waiting == 4):
             serialString = self.serialPort.read(4) # read up to byte_to_receive or as much as in buffer
             data_bytes = np.array(serialString)
