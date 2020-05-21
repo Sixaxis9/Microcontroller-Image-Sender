@@ -19,17 +19,26 @@ class Serial:
         self.serialPort.write(bytes(data))
 
     def serial_receive_int(self):
-        if(self.serialPort.in_waiting == 1):
-            serialString = self.serialPort.read(1) # read up to byte_to_receive or as much as in buffer
+        if(self.serialPort.in_waiting >= 1):
+            serialString = self.serialPort.read(1)
             return int.from_bytes(serialString, "big")
         else:
             return -1 # No data in buffer
 
     def serial_receive_float(self):
-        if(self.serialPort.in_waiting == 4):
-            serialString = self.serialPort.read(4) # read up to byte_to_receive or as much as in buffer
+        if(self.serialPort.in_waiting >= 4):
+            serialString = self.serialPort.read(4)
             data_bytes = np.array(serialString)
             data_as_float = data_bytes.view(dtype=np.float32)
+            return data_as_float
+        else:
+            return -1 # No data in buffer
+    
+    def serial_receive_32bit_uint(self):
+        if(self.serialPort.in_waiting >= 4):
+            serialString = self.serialPort.read(4)
+            data_bytes = np.array(serialString)
+            data_as_float = data_bytes.view(dtype=np.uint32)
             return data_as_float
         else:
             return -1 # No data in buffer

@@ -69,6 +69,7 @@ class GUI:
     def read_from_serial(self):
         infered_class = self.Serial.serial_receive_int()
         accuracy = self.Serial.serial_receive_float()
+        cycles = self.Serial.serial_receive_32bit_uint()
         if infered_class != -1:
             self.predicted_label_2.configure(text=str(infered_class))
             if self.labels.shape[-1] != 0:
@@ -96,6 +97,10 @@ class GUI:
         
         if accuracy != -1:
             self.accuracy_lbl_display.configure(text='{:.2f}'.format(accuracy))
+
+        if cycles != -1:
+            self.cycle_counter_lbl_display.configure(text=str(cycles))
+            self.time_for_inference_lbl_display.configure(text='{:.2f} ms'.format(cycles/80000))
 
         self.window.after(100, self.read_from_serial)
 
@@ -147,10 +152,14 @@ class GUI:
         self.correct_percentage_lbl = Label(text="Correct percentage", master=self.metrics_frm)
         self.sent_counter_lbl = Label(text="All predictions", master=self.metrics_frm)
         self.accuracy_lbl = Label(text="Last accuracy", master=self.metrics_frm)
+        self.cycle_counter_lbl = Label(text="Number of cycles", master=self.metrics_frm)
+        self.time_for_inference_lbl = Label(text="Time for inference", master=self.metrics_frm)
         self.correct_counter_lbl_display = Label(text="---", master=self.metrics_frm)
         self.correct_percentage_lbl_display = Label(text="---", master=self.metrics_frm)
         self.sent_counter_lbl_display = Label(text="---", master=self.metrics_frm)
         self.accuracy_lbl_display = Label(text="---", master=self.metrics_frm)
+        self.cycle_counter_lbl_display = Label(text="---", master=self.metrics_frm)
+        self.time_for_inference_lbl_display = Label(text="---", master=self.metrics_frm)
 
         self.next_image_btn = Button(text="Send image", command=self.next_image, master=self.buttons_frm)
         self.start_burst_btn = Button(text="Start burst", command=self.next_image, master=self.buttons_frm)
@@ -196,17 +205,21 @@ class GUI:
         self.correct_percentage_lbl.grid(row=0, column=2, padx=5, pady=10)
         self.sent_counter_lbl.grid(row=1, column=0, padx=5, pady=10)
         self.accuracy_lbl.grid(row=1, column=2, padx=5, pady=10)
+        self.cycle_counter_lbl.grid(row=2, column=0, padx=5, pady=10)
+        self.time_for_inference_lbl.grid(row=2, column=2, padx=5, pady=10)
         self.correct_counter_lbl_display.grid(row=0, column=1, padx=5, pady=10)
         self.correct_percentage_lbl_display.grid(row=0, column=3, padx=5, pady=10)
         self.sent_counter_lbl_display.grid(row=1, column=1, padx=5, pady=10)
         self.accuracy_lbl_display.grid(row=1, column=3, padx=5, pady=10)
+        self.cycle_counter_lbl_display.grid(row=2, column=1, padx=5, pady=10)
+        self.time_for_inference_lbl_display.grid(row=2, column=3, padx=5, pady=10)
 
         self.canvas.get_tk_widget().grid(row=0, column=0)
 
-        self.next_image_btn.grid(row=0, column=0, padx=20, pady=20)
-        self.start_burst_btn.grid(row=0, column=1, padx=20, pady=20)
+        self.next_image_btn.grid(row=0, column=0, padx=20, pady=5)
+        self.start_burst_btn.grid(row=0, column=1, padx=20, pady=5)
 
-        self.self_bragging_lbl.grid(row=1, column=0)
+        self.self_bragging_lbl.grid(row=1, column=0, padx=0, pady=10)
 
 
     # Frames
