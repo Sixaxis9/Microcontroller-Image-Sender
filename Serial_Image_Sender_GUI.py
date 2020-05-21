@@ -1,6 +1,6 @@
 from tkinter import *
 from GUI import *
-
+    
 window = Tk()
 
 window.title("Serial Image Sender")
@@ -9,5 +9,5 @@ window.title("Serial Image Sender")
 gui = GUI(window)
 gui.UI_init()
 
-window.geometry('640x420')
+window.geometry('620x420')
 window.mainloop()
