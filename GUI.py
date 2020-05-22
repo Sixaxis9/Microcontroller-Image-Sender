@@ -20,6 +20,7 @@ class GUI:
         self.Serial = Serial("COM3")
         self.all_inference=0
         self.correct_inference=0
+        self.berserk_mode = 0
 
     # Function definition
     def com_clicked(self):
@@ -64,6 +65,15 @@ class GUI:
         self.ground_truth_2.configure(bg="SystemButtonFace")
         
         self.Serial.serial_send(self.image)
+
+    def berserk_button(self):
+        if self.berserk_mode == 0:
+            self.berserk_mode = 1
+            self.next_image()
+            self.start_burst_btn.configure(bg="Purple")
+        else:
+            self.berserk_mode = 0
+            self.start_burst_btn.configure(bg="SystemButtonFace")
         
 
     def read_from_serial(self):
@@ -94,6 +104,8 @@ class GUI:
             self.correct_counter_lbl_display.configure(text=str(self.correct_inference))
             self.correct_percentage_lbl_display.configure(text='{:.2f}'.format(self.correct_inference/self.all_inference*100))
             self.sent_counter_lbl_display.configure(text=int(self.all_inference))
+            if self.berserk_mode:
+                self.next_image()
         
         if accuracy != -1:
             self.accuracy_lbl_display.configure(text='{:.2f}'.format(accuracy))
@@ -162,7 +174,7 @@ class GUI:
         self.time_for_inference_lbl_display = Label(text="---", master=self.metrics_frm)
 
         self.next_image_btn = Button(text="Send image", command=self.next_image, master=self.buttons_frm)
-        self.start_burst_btn = Button(text="Start burst", command=self.next_image, master=self.buttons_frm)
+        self.start_burst_btn = Button(text="Berserk mode", command=self.berserk_button, master=self.buttons_frm)
 
         self.self_bragging_lbl = Label(text="Image sender by Marco Giordano", master=self.mode_frm)
     
