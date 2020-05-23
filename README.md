@@ -1,7 +1,7 @@
 # Microcontroller-Image-Sender
 Introducing a simple Python GUI to resize and send via serial images to microcontrollers
 
-![GUI of the sender](/asset/screenshot_main.png)
+![GUI of the sender](/asset/screenshot_main.jpg)
 
 ## How to use
 To use this tool you have to install the packages in requirement.txt (you can do that via `pip install -r requirement.txt`) and then run `python Serial_Image_Sender_GUI.py`. The GUI will open and you can access all the functionalities of the program without a single line of code.
@@ -18,3 +18,7 @@ Additionally, you can provide:
 
 ## What should I send via serial?
 
+The program expect the following input data in this order:
+* Uint8_t for the class number
+* Float_32 for the inference accuracy
+* Uint32_t for the cycle count
