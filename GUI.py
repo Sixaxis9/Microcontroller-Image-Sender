@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 import os
 
 class GUI:
+
     def __init__(self, window):
         self.i = 0
         self.image_list = []
@@ -73,13 +74,10 @@ class GUI:
             self.start_burst_btn.configure(bg="Purple")
         else:
             self.berserk_mode = 0
-            self.start_burst_btn.configure(bg="SystemButtonFace")
-        
+            self.start_burst_btn.configure(bg="SystemButtonFace")        
 
     def read_from_serial(self):
         infered_class = self.Serial.serial_receive_int()
-        accuracy = self.Serial.serial_receive_float()
-        cycles = self.Serial.serial_receive_32bit_uint()
         if infered_class != -1:
             self.predicted_label_2.configure(text=str(infered_class))
             if self.labels.shape[-1] != 0:
@@ -104,15 +102,18 @@ class GUI:
             self.correct_counter_lbl_display.configure(text=str(self.correct_inference))
             self.correct_percentage_lbl_display.configure(text='{:.2f}'.format(self.correct_inference/self.all_inference*100))
             self.sent_counter_lbl_display.configure(text=int(self.all_inference))
+
             if self.berserk_mode:
                 self.next_image()
         
-        if accuracy != -1:
-            self.accuracy_lbl_display.configure(text='{:.2f}'.format(accuracy))
+            accuracy = self.Serial.serial_receive_float()
+            if accuracy != -1:
+                self.accuracy_lbl_display.configure(text='{:.2f}'.format(accuracy))
 
-        if cycles != -1:
-            self.cycle_counter_lbl_display.configure(text=str(cycles))
-            self.time_for_inference_lbl_display.configure(text='{:.2f} ms'.format(cycles/80000))
+            cycles = self.Serial.serial_receive_32bit_uint()
+            if cycles != -1:
+                self.cycle_counter_lbl_display.configure(text=str(cycles))
+                self.time_for_inference_lbl_display.configure(text='{:.2f} ms'.format(cycles/80000))
 
         self.window.after(100, self.read_from_serial)
 
