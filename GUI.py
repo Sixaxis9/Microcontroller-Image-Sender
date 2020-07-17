@@ -102,9 +102,6 @@ class GUI:
             self.correct_counter_lbl_display.configure(text=str(self.correct_inference))
             self.correct_percentage_lbl_display.configure(text='{:.2f}'.format(self.correct_inference/self.all_inference*100))
             self.sent_counter_lbl_display.configure(text=int(self.all_inference))
-
-            if self.berserk_mode:
-                self.next_image()
         
             accuracy = self.Serial.serial_receive_float()
             if accuracy != -1:
@@ -115,6 +112,9 @@ class GUI:
                 self.cycle_counter_lbl_display.configure(text=str(cycles))
                 self.time_for_inference_lbl_display.configure(text='{:.2f} ms'.format(cycles/80000))
 
+            if self.berserk_mode:
+                self.next_image()
+                
         self.window.after(100, self.read_from_serial)
 
 
